@@ -46,9 +46,9 @@ pipeline:
 
                       set -euo pipefail
 
-                      echo "Upgrading npm"
+                      echo "Checking npm version"
 
-                      npm install -g npm@latest
+                      npm --version
 
                       echo 'Installing Dependencies'
                       npm ci --verbose
