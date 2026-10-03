@@ -38,7 +38,7 @@ pipeline:
                   name: Testing
                   identifier: Testing
                   spec:
-                    connectorRef: account.harnessImage
+                    connectorRef: harness_docker_reg
                     image: python:3.13-slim
                     shell: Bash
                     command: |-
