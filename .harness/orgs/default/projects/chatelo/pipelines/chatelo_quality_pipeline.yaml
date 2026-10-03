@@ -51,6 +51,6 @@ pipeline:
                       npm install -g npm@latest
 
                       echo 'Installing Dependencies'
-                      npm ci
+                      npm ci --verbose
 
                       echo 'DEPENDENCIES INSTALLED SUCCESSFULLY'
