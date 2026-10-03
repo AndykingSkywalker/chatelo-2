@@ -31,15 +31,32 @@ export async function OtherProfiles({
         <CardTitle className="text-base">Other profiles</CardTitle>
         <div className="flex gap-1">
           {(["all", "online", "offline"] as const).map((s) => (
-            <Link key={s} href={s === "all" ? basePath : `${basePath}?status=${s}`} className={buttonVariants({ size: "sm", variant: s === status ? "default" : "outline" })}>{s}</Link>
+            <Link
+              key={s}
+              href={s === "all" ? basePath : `${basePath}?status=${s}`}
+              className={buttonVariants({
+                size: "sm",
+                variant: s === status ? "default" : "outline",
+              })}
+            >
+              {s}
+            </Link>
           ))}
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
         {shown.length === 0 && <p className="text-sm text-muted-foreground">No users.</p>}
         {shown.map((u) => (
-          <Link key={u.id} href={`/users/${u.id}`} className="flex items-center gap-3 hover:underline">
-            <Avatar><AvatarFallback className="bg-gradient-to-br from-orange-400 to-red-500 text-white">{initials(u.name)}</AvatarFallback></Avatar>
+          <Link
+            key={u.id}
+            href={`/users/${u.id}`}
+            className="flex items-center gap-3 hover:underline"
+          >
+            <Avatar>
+              <AvatarFallback className="bg-gradient-to-br from-orange-400 to-red-500 text-white">
+                {initials(u.name)}
+              </AvatarFallback>
+            </Avatar>
             <span className="flex-1 truncate">{u.name}</span>
             <Badge variant={isOnline(u.lastSignedInAt) ? "default" : "secondary"}>
               {isOnline(u.lastSignedInAt) ? "online" : "offline"}
@@ -50,4 +67,3 @@ export async function OtherProfiles({
     </Card>
   );
 }
-

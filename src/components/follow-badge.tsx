@@ -7,7 +7,10 @@ export function FollowBadge({ targetId, following }: { targetId: number; followi
     <form action={toggleFollow.bind(null, targetId)} className="inline">
       <button
         type="submit"
-        className={cn(badgeVariants({ variant: following ? "secondary" : "default" }), "cursor-pointer")}
+        className={cn(
+          badgeVariants({ variant: following ? "secondary" : "default" }),
+          "cursor-pointer",
+        )}
       >
         {following ? "Following" : "Follow"}
       </button>

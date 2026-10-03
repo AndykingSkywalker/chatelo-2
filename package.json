@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:ox": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "postinstall": "prisma generate",
     "db:setup": "prisma db push && tsx prisma/seed.ts",
     "db:populate": "tsx prisma/seed-demo.ts"
@@ -35,6 +38,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.27",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"

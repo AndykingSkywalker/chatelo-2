@@ -24,7 +24,10 @@ export default async function UserPage({
   const { status } = await searchParams;
   const uid = Number(id);
   if (!Number.isInteger(uid)) notFound();
-  const [user, me] = await Promise.all([prisma.user.findUnique({ where: { id: uid } }), getCurrentUser()]);
+  const [user, me] = await Promise.all([
+    prisma.user.findUnique({ where: { id: uid } }),
+    getCurrentUser(),
+  ]);
   if (!user) notFound();
   const [posts, followingIds, followerCount, followingCount] = await Promise.all([
     prisma.post.findMany({
@@ -42,34 +45,58 @@ export default async function UserPage({
       <section className="space-y-6">
         <Card>
           <CardContent className="flex items-center gap-4">
-            <Avatar className="size-16"><AvatarFallback className="bg-gradient-to-br from-orange-400 to-red-500 text-xl font-semibold text-white">{initials(user.name)}</AvatarFallback></Avatar>
+            <Avatar className="size-16">
+              <AvatarFallback className="bg-gradient-to-br from-orange-400 to-red-500 text-xl font-semibold text-white">
+                {initials(user.name)}
+              </AvatarFallback>
+            </Avatar>
             <div className="flex-1">
               <h1 className="text-2xl font-bold">{user.name}</h1>
               <p className="text-sm text-muted-foreground">{user.email}</p>
               {user.website && (
-                <a href={user.website} target="_blank" rel="noopener noreferrer nofollow" className="text-sm underline">
+                <a
+                  href={user.website}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="text-sm underline"
+                >
                   {user.website}
                 </a>
               )}
               <div className="mt-1 flex items-center gap-2">
-                <Badge variant={online ? "default" : "secondary"}>{online ? "online" : "offline"}</Badge>
-                {me && me.id !== user.id && <FollowBadge targetId={user.id} following={followingIds.has(user.id)} />}
+                <Badge variant={online ? "default" : "secondary"}>
+                  {online ? "online" : "offline"}
+                </Badge>
+                {me && me.id !== user.id && (
+                  <FollowBadge targetId={user.id} following={followingIds.has(user.id)} />
+                )}
               </div>
               <div className="mt-2 flex gap-4 text-sm">
                 <Link href={`/users/${user.id}/followers`} className="hover:underline">
-                  <span className="font-semibold">{followerCount}</span> <span className="text-muted-foreground">{followerCount === 1 ? "follower" : "followers"}</span>
+                  <span className="font-semibold">{followerCount}</span>{" "}
+                  <span className="text-muted-foreground">
+                    {followerCount === 1 ? "follower" : "followers"}
+                  </span>
                 </Link>
                 <Link href={`/users/${user.id}/following`} className="hover:underline">
-                  <span className="font-semibold">{followingCount}</span> <span className="text-muted-foreground">following</span>
+                  <span className="font-semibold">{followingCount}</span>{" "}
+                  <span className="text-muted-foreground">following</span>
                 </Link>
               </div>
             </div>
             {me?.id === user.id && (
-              <Link href={`/users/${user.id}/edit`} className={buttonVariants({ variant: "outline" })}>Edit profile</Link>
+              <Link
+                href={`/users/${user.id}/edit`}
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Edit profile
+              </Link>
             )}
           </CardContent>
         </Card>
-        {posts.map((p) => <PostCard key={p.id} post={p} meId={me?.id} followingIds={followingIds} />)}
+        {posts.map((p) => (
+          <PostCard key={p.id} post={p} meId={me?.id} followingIds={followingIds} />
+        ))}
         {posts.length === 0 && <p className="text-muted-foreground">No posts yet.</p>}
       </section>
       <aside>

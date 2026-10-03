@@ -23,7 +23,9 @@ const MAX_BYTES = 5 * 1024 * 1024;
 export type FormState = { error?: string; ok?: boolean };
 
 export async function login(_: FormState, formData: FormData): Promise<FormState> {
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
   if (!email) return { error: "Enter your email." };
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) return { error: "No account found with that email." };
@@ -41,7 +43,9 @@ export async function logout() {
 
 export async function createProfile(_: FormState, formData: FormData): Promise<FormState> {
   const name = String(formData.get("name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
   let website = String(formData.get("website") ?? "").trim();
   if (!name) return { error: "Name is required." };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Enter a valid email." };
@@ -120,11 +124,17 @@ export async function toggleFollow(targetId: number) {
   revalidatePath("/", "layout");
 }
 
-export async function updateProfile(userId: number, _: FormState, formData: FormData): Promise<FormState> {
+export async function updateProfile(
+  userId: number,
+  _: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const me = await getCurrentUser();
   if (!me || me.id !== userId) return { error: "You can only edit your own profile." };
   const name = String(formData.get("name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
   let website = String(formData.get("website") ?? "").trim();
   if (!name) return { error: "Name is required." };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Enter a valid email." };
@@ -138,7 +148,10 @@ export async function updateProfile(userId: number, _: FormState, formData: Form
   }
   const clash = await prisma.user.findFirst({ where: { email, NOT: { id: userId } } });
   if (clash) return { error: "That email is already in use." };
-  await prisma.user.update({ where: { id: userId }, data: { name, email, website: website || null } });
+  await prisma.user.update({
+    where: { id: userId },
+    data: { name, email, website: website || null },
+  });
   revalidatePath("/", "layout");
   redirect(`/users/${userId}`);
 }

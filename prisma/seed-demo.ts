@@ -14,13 +14,65 @@ const rand = () => {
   t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 };
-const pick = <T,>(a: T[]) => a[Math.floor(rand() * a.length)];
+const pick = <T>(a: T[]) => a[Math.floor(rand() * a.length)];
 const chance = (p: number) => rand() < p;
-const sample = <T,>(a: T[], n: number) => [...a].sort(() => rand() - 0.5).slice(0, n);
+const sample = <T>(a: T[], n: number) => [...a].sort(() => rand() - 0.5).slice(0, n);
 
-const first = ["Maya", "Noah", "Priya", "Lucas", "Zara", "Ethan", "Amara", "Oliver", "Sofia", "Kai", "Layla", "Mateo", "Ines", "Jonas", "Hana", "Omar", "Freya", "Diego", "Nina", "Theo", "Yuki", "Callum", "Esme", "Rafael", "Anya"];
-const last = ["Patel", "Nguyen", "Okafor", "Silva", "Kowalski", "Haddad", "Larsen", "Moreau", "Tanaka", "Reyes", "Fischer", "Adeyemi", "Murphy", "Rossi", "Chen", "Dubois", "Santos", "Novak", "Khan", "Evans"];
-const domains = ["devblog.example.com", "portfolio.example.io", "studio.example.net", "notes.example.org"];
+const first = [
+  "Maya",
+  "Noah",
+  "Priya",
+  "Lucas",
+  "Zara",
+  "Ethan",
+  "Amara",
+  "Oliver",
+  "Sofia",
+  "Kai",
+  "Layla",
+  "Mateo",
+  "Ines",
+  "Jonas",
+  "Hana",
+  "Omar",
+  "Freya",
+  "Diego",
+  "Nina",
+  "Theo",
+  "Yuki",
+  "Callum",
+  "Esme",
+  "Rafael",
+  "Anya",
+];
+const last = [
+  "Patel",
+  "Nguyen",
+  "Okafor",
+  "Silva",
+  "Kowalski",
+  "Haddad",
+  "Larsen",
+  "Moreau",
+  "Tanaka",
+  "Reyes",
+  "Fischer",
+  "Adeyemi",
+  "Murphy",
+  "Rossi",
+  "Chen",
+  "Dubois",
+  "Santos",
+  "Novak",
+  "Khan",
+  "Evans",
+];
+const domains = [
+  "devblog.example.com",
+  "portfolio.example.io",
+  "studio.example.net",
+  "notes.example.org",
+];
 
 const posts = [
   "Just shipped a big refactor and nothing broke. Suspicious. #coding #shipit",
@@ -83,7 +135,12 @@ const posts = [
   "Spent the evening organising my bookshelf by colour. No regrets. #books #cozy",
 ];
 const replies = [
-  "Couldn't agree more!", "This made my day 😄", "Love this.", "So true.", "Great share, thanks!", "Needed this today.",
+  "Couldn't agree more!",
+  "This made my day 😄",
+  "Love this.",
+  "So true.",
+  "Great share, thanks!",
+  "Needed this today.",
 ];
 
 async function main() {
@@ -103,7 +160,9 @@ async function main() {
           name,
           email: `${handle}@${DEMO_DOMAIN}`,
           website: chance(0.35) ? `https://${handle.split(".")[0]}.${pick(domains)}` : null,
-          lastSignedInAt: new Date(now - (online ? rand() * 0.2 * HOUR : (0.5 + rand() * 96) * HOUR)),
+          lastSignedInAt: new Date(
+            now - (online ? rand() * 0.2 * HOUR : (0.5 + rand() * 96) * HOUR),
+          ),
           createdAt: new Date(now - (7 + rand() * 60) * 24 * HOUR),
         },
       }),
@@ -118,7 +177,9 @@ async function main() {
     const author = chance(0.7) ? pick(active) : pick(users);
     let content = pick(posts);
     if (chance(0.15)) content += ` ${pick(replies)}`;
-    const tags = [...new Set([...content.matchAll(/#([\p{L}\p{N}_]+)/gu)].map((m) => m[1].toLowerCase()))];
+    const tags = [
+      ...new Set([...content.matchAll(/#([\p{L}\p{N}_]+)/gu)].map((m) => m[1].toLowerCase())),
+    ];
     const createdAt = new Date(now - ageHours * HOUR);
     const post = await prisma.post.create({
       data: {
@@ -136,7 +197,8 @@ async function main() {
   const fires = [];
   for (const p of createdPosts) {
     const n = chance(0.08) ? 15 + Math.floor(rand() * 20) : Math.floor(rand() * rand() * 12);
-    for (const u of sample(users, n)) if (u.id !== p.authorId) fires.push({ userId: u.id, postId: p.id });
+    for (const u of sample(users, n))
+      if (u.id !== p.authorId) fires.push({ userId: u.id, postId: p.id });
   }
   await prisma.fire.createMany({ data: fires });
 
@@ -144,7 +206,8 @@ async function main() {
   const popular = users.slice(0, 8);
   const follows = new Map<string, { followerId: number; followingId: number }>();
   const add = (followerId: number, followingId: number) => {
-    if (followerId !== followingId) follows.set(`${followerId}:${followingId}`, { followerId, followingId });
+    if (followerId !== followingId)
+      follows.set(`${followerId}:${followingId}`, { followerId, followingId });
   };
   for (const u of users) {
     for (const t of sample(popular, 2 + Math.floor(rand() * 5))) add(u.id, t.id);
@@ -152,7 +215,9 @@ async function main() {
   }
 
   // Wire real (non-demo) accounts in too, so their feed and follower lists feel alive.
-  const real = await prisma.user.findMany({ where: { email: { not: { endsWith: `@${DEMO_DOMAIN}` } } } });
+  const real = await prisma.user.findMany({
+    where: { email: { not: { endsWith: `@${DEMO_DOMAIN}` } } },
+  });
   for (const r of real) {
     for (const t of sample(users, 12)) add(r.id, t.id);
     for (const t of sample(users, 15)) add(t.id, r.id);
@@ -162,9 +227,20 @@ async function main() {
   await prisma.hashtag.deleteMany({ where: { posts: { none: {} } } });
 
   const [u, p, f, fo, h] = await Promise.all([
-    prisma.user.count(), prisma.post.count(), prisma.fire.count(), prisma.follow.count(), prisma.hashtag.count(),
+    prisma.user.count(),
+    prisma.post.count(),
+    prisma.fire.count(),
+    prisma.follow.count(),
+    prisma.hashtag.count(),
   ]);
-  console.log({ users: u, posts: p, fires: f, follows: fo, hashtags: h, realAccountsKept: real.length });
+  console.log({
+    users: u,
+    posts: p,
+    fires: f,
+    follows: fo,
+    hashtags: h,
+    realAccountsKept: real.length,
+  });
 }
 
 main().finally(() => prisma.$disconnect());

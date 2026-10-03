@@ -10,7 +10,11 @@ import { getFollowingIds } from "@/lib/follows";
 
 export const dynamic = "force-dynamic";
 
-export default async function PostsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+export default async function PostsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>;
+}) {
   const { status } = await searchParams;
   const me = await getCurrentUser();
   const followingIds = await getFollowingIds(me?.id);
@@ -27,18 +31,24 @@ export default async function PostsPage({ searchParams }: { searchParams: Promis
     <div className="grid gap-8 md:grid-cols-[1fr_300px]">
       <section className="space-y-6">
         <PostComposer />
-        {posts.map((p) => <PostCard key={p.id} post={p} meId={me?.id} followingIds={followingIds} />)}
+        {posts.map((p) => (
+          <PostCard key={p.id} post={p} meId={me?.id} followingIds={followingIds} />
+        ))}
         {posts.length === 0 && <p className="text-muted-foreground">No posts yet.</p>}
       </section>
       <aside className="space-y-6">
         <PopularHashtags />
         <Card>
-          <CardHeader><CardTitle className="text-base">🔥 Most fired</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">🔥 Most fired</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-3">
             {top.length === 0 && <p className="text-sm text-muted-foreground">No fires yet.</p>}
             {top.map((p) => (
               <div key={p.id} className="text-sm">
-                <Link href={`/users/${p.author.id}`} className="font-semibold hover:underline">{p.author.name}</Link>
+                <Link href={`/users/${p.author.id}`} className="font-semibold hover:underline">
+                  {p.author.name}
+                </Link>
                 <p className="line-clamp-2">{p.content || "📷 Image"}</p>
                 <p className="text-xs text-muted-foreground">🔥 {p._count.fires}</p>
               </div>
@@ -54,4 +64,3 @@ export default async function PostsPage({ searchParams }: { searchParams: Promis
     </div>
   );
 }
-

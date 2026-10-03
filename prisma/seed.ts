@@ -42,7 +42,11 @@ async function main() {
   for (let i = 0; i < texts.length; i++) {
     posts.push(
       await prisma.post.create({
-        data: { content: texts[i], authorId: users[i % users.length].id, createdAt: h(texts.length - i) },
+        data: {
+          content: texts[i],
+          authorId: users[i % users.length].id,
+          createdAt: h(texts.length - i),
+        },
       }),
     );
   }

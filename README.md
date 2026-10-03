@@ -15,4 +15,3 @@ npm run dev
 - Set `DATABASE_URL` in `.env` (SQLite by default).
 - Follow: Follow/Following badge beside post authors and on profiles; profiles show follower/following counts linking to /users/[id]/followers and /users/[id]/following.
 - Hashtags: #tags in posts are linked and stored; header search (people or #tag) at `/search`; feed sidebar shows popular hashtags from the last 24h.
-

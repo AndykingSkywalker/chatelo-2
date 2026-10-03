@@ -14,13 +14,23 @@ export async function PopularHashtags() {
     .slice(0, 5);
   return (
     <Card>
-      <CardHeader><CardTitle className="text-base"># Popular today</CardTitle></CardHeader>
+      <CardHeader>
+        <CardTitle className="text-base"># Popular today</CardTitle>
+      </CardHeader>
       <CardContent className="space-y-2">
-        {top.length === 0 && <p className="text-sm text-muted-foreground">No hashtags in the last 24 hours.</p>}
+        {top.length === 0 && (
+          <p className="text-sm text-muted-foreground">No hashtags in the last 24 hours.</p>
+        )}
         {top.map((t) => (
-          <Link key={t.tag} href={`/search?q=${encodeURIComponent("#" + t.tag)}`} className="flex items-center justify-between text-sm hover:underline">
+          <Link
+            key={t.tag}
+            href={`/search?q=${encodeURIComponent("#" + t.tag)}`}
+            className="flex items-center justify-between text-sm hover:underline"
+          >
             <span className="font-medium">#{t.tag}</span>
-            <span className="text-xs text-muted-foreground">{t.count} {t.count === 1 ? "post" : "posts"}</span>
+            <span className="text-xs text-muted-foreground">
+              {t.count} {t.count === 1 ? "post" : "posts"}
+            </span>
           </Link>
         ))}
       </CardContent>
