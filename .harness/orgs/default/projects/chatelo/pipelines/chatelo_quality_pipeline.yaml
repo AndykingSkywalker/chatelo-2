@@ -67,6 +67,14 @@ pipeline:
                           echo 'Oxlint Failed!'
                           exit 1
                       fi
+
+                      if npm run format:check; then
+                          echo 'Oxfmt Check Has Passed'
+                      else
+                          echo 'Oxfmt Failed!'
+                          exit 1
+                      fi
+                      echo 'All Tests Passed Moving to Build Stage'
                     resources:
                       limits:
                         memory: 2Gi
