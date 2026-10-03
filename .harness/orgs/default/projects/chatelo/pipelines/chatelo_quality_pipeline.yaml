@@ -58,6 +58,15 @@ pipeline:
                       npm install oxlint
 
                       echo 'Installed Oxlint and Oxfmt'
+                      echo '#######################################################'
+                      echo 'Running oxlint'
+
+                      if npm run lint:ox; then
+                          echo 'Oxlint Check Has Passed'
+                      else
+                          echo 'Oxlint Failed!'
+                          exit 1
+                      fi
                     resources:
                       limits:
                         memory: 2Gi
