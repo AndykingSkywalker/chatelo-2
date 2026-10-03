@@ -90,7 +90,12 @@ pipeline:
             enabled: true
             override: true
           infrastructure:
-            useFromStage: Testing
+            type: KubernetesDirect
+            spec:
+              connectorRef: newharnesscluster
+              namespace: new-harness-cluster
+              nodeSelector: {}
+              os: Linux
           execution:
             steps:
               - step:
