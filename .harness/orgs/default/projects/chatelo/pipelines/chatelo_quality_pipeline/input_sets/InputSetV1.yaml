@@ -1,0 +1,29 @@
+inputSet:
+  pipeline:
+    identifier: chatelo_quality_pipeline
+    properties:
+      ci:
+        codebase:
+          build:
+            spec:
+              branch: feat-harness-pipeline
+            type: branch
+    stages:
+      - stage:
+          identifier: Build_and_Push
+          type: CI
+          spec:
+            execution:
+              steps:
+                - step:
+                    identifier: Build_and_Push_to_GAR
+                    type: BuildAndPushGAR
+                    spec:
+                      connectorRef: gcpconnector
+                      host: europe-west2-docker.pkg.dev
+                      projectID: chatelo-2026-10-03
+                      imageName: harness-docker-reg/chatelo-2
+  name: Input-Set-V1
+  identifier: InputSetV1
+  orgIdentifier: default
+  projectIdentifier: chatelo
