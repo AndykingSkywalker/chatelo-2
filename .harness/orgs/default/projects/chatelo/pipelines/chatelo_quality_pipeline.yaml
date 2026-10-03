@@ -54,3 +54,7 @@ pipeline:
                       npm ci --verbose
 
                       echo 'DEPENDENCIES INSTALLED SUCCESSFULLY'
+                    resources:
+                      limits:
+                        memory: 2Gi
+                        cpu: "1"
