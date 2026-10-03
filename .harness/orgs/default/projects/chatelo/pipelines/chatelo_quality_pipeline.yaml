@@ -35,15 +35,22 @@ pipeline:
             steps:
               - step:
                   type: Run
-                  name: Testing
+                  name: Oxlint and Oxfmt
                   identifier: Testing
                   spec:
                     connectorRef: harness_docker_reg
-                    image: python:3.13-slim
+                    image: node:26-bookworm-slim
                     shell: Bash
                     command: |-
                       #!/usr/bin/env bash
 
                       set -euo pipefail
 
-                      echo "Hello"
+                      echo "Upgrading npm"
+
+                      npm install -g npm@latest
+
+                      echo 'Installing Dependencies'
+                      npm ci
+
+                      echo 'DEPENDENCIES INSTALLED SUCCESSFULLY'
