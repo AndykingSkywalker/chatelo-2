@@ -26,7 +26,7 @@ pipeline:
           infrastructure:
             type: KubernetesDirect
             spec:
-              connectorRef: account.harnesscluster
+              connectorRef: newharnesscluster
               namespace: harness-delegate-ng
               automountServiceAccountToken: true
               nodeSelector: {}
