@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.harness
+.env*
+*.db
+*.db-journal
+uploads
+Dockerfile
+.dockerignore
+README.md

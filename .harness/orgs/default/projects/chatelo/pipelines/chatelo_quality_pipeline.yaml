@@ -79,3 +79,41 @@ pipeline:
                       limits:
                         memory: 2Gi
                         cpu: "1"
+    - stage:
+        name: Build and Push
+        identifier: Build_and_Push
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: account.harnesscluster
+              namespace: harness-delegate-ng
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: BuildAndPushGAR
+                  name: Build and Push to GAR
+                  identifier: Build_and_Push_to_GAR
+                  spec:
+                    connectorRef: <+input>
+                    host: <+input>
+                    projectID: <+input>
+                    imageName: <+input>
+                    tags:
+                      - <+codebase.shortCommitSha>
+                      - latest
+                    dockerfile: Dockerfile
+                    caching: true
+                    resources:
+                      limits:
+                        memory: 4Gi
+                        cpu: "2"
