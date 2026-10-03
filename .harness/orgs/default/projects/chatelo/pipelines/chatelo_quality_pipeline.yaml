@@ -79,3 +79,33 @@ pipeline:
                       limits:
                         memory: 2Gi
                         cpu: "1"
+    - stage:
+        name: Build the app and deploy to GAR
+        identifier: Build_the_app_and_deploy_to_GAR
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            useFromStage: Testing
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Build and Deploy the app
+                  identifier: Build_and_Deploy_the_app
+                  spec:
+                    connectorRef: harness_docker_reg
+                    image: node:26-bookworm-slim
+                    shell: Bash
+                    command: |-
+                      #!/usr/bin/env bash
+
+                      set -euo pipefail
+
+                      echo "Building Stage!"
