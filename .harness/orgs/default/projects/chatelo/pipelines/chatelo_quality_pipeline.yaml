@@ -51,9 +51,13 @@ pipeline:
                       npm --version
 
                       echo 'Installing Dependencies'
-                      npm ci --verbose
-
+                      npm ci
                       echo 'DEPENDENCIES INSTALLED SUCCESSFULLY'
+
+                      npm install oxfmt
+                      npm install oxlint
+
+                      echo 'Installed Oxlint and Oxfmt'
                     resources:
                       limits:
                         memory: 2Gi
