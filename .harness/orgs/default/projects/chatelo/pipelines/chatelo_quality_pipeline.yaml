@@ -93,7 +93,7 @@ pipeline:
             type: KubernetesDirect
             spec:
               connectorRef: newharnesscluster
-              namespace: new-harness-cluster
+              namespace: harness-delegate-ng
               nodeSelector: {}
               os: Linux
           execution:
