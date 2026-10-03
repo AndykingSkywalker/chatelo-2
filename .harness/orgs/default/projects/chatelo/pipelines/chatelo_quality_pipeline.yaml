@@ -1,0 +1,49 @@
+pipeline:
+  name: chatelo-quality-pipeline
+  identifier: chatelo_quality_pipeline
+  projectIdentifier: chatelo
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: andrewgithubconnector
+        repoName: chatelo-2
+        build: <+input>
+  stages:
+    - stage:
+        name: Testing
+        identifier: Testing
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: account.harnesscluster
+              namespace: harness-delegate-ng
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Testing
+                  identifier: Testing
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: python:3.13-slim
+                    shell: Bash
+                    command: |-
+                      #!/usr/bin/env bash
+
+                      set -euo pipefail
+
+                      echo "Hello"
