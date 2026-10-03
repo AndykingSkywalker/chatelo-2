@@ -90,13 +90,7 @@ pipeline:
             enabled: true
             override: true
           infrastructure:
-            type: KubernetesDirect
-            spec:
-              connectorRef: account.harnesscluster
-              namespace: harness-delegate-ng
-              automountServiceAccountToken: true
-              nodeSelector: {}
-              os: Linux
+            useFromStage: Testing
           execution:
             steps:
               - step:
